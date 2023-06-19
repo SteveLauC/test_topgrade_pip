@@ -69,8 +69,6 @@ body:
 
   - type: markdown
     attributes:
-      label: "Verbose Output"
-      description: "Run `topgrade -v` and paste the output here"
       value: |
         <details>
         <!-- Paste the output of the problematic command with `-v` into the pre-tags -->
