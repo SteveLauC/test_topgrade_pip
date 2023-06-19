@@ -1,0 +1,70 @@
+name: Bug Report
+description: Report a problem in Topgrade
+labels: [bug]
+body:
+
+  - type: markdown
+    attributes:
+    value: |
+       Thanks for taking the time to fill out this bug report!
+       Please make sure to [search for existing issues](https://github.com/topgrade-rs/topgrade/issues) 
+       before filing a new one!
+
+  - type: textarea
+    attributes:
+      label: "Expected Behavior"
+      description: "Describe the expected behavior."
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Actual Behavior"
+      description: "Describe what actually happened"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: "Problem persists without calling from topgrade"
+      description: "If you are clear about which command is wrong, run that command separately to see if the problem persists"
+      options:
+        - label: Yes
+          required: true
+
+  - type: textarea
+    attributes:
+      label: "Steps to reproduce"
+      description: "A minimal example to reproduce the issue"
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: "Topgrade version (topgrade -v)"
+      placeholder: "Topgrade 11.0.2"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "Your Configuration file"
+      description: "Ignore this if you think the issue is configuration-irrelevant"
+    validations:
+      required: false
+
+  - type: input
+    attributes:
+      label: "Operating system/version"
+      placeholder: "Fedora 38"
+    validations:
+      required: true
+
+  - type: input
+    attributes:
+      label: "Installation"
+      description: "How did you install topgrade: build from repo / crates.io(cargo install topgrade) / package manager (which one) / other (describe)?"
+      placeholder: "crates.io"
+    validations:
+      required: true
