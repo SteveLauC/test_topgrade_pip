@@ -8,13 +8,13 @@ assignees: ''
 ---
 
 Thanks for taking the time to fill out this bug report! 
-Please make sure to 
-[search for existing issues](https://github.com/topgrade-rs/topgrade/issues)
-before filing a new one!
+Please make sure to [search for existing issues](https://github.com/topgrade-rs/topgrade/issues) before filing a new one!
+
+Questions labeled with `Optional` can be skipped.
 
 <!-- If you're here to report about a "No asset found" error, please make sure that an hour has been passed since the last release was made. -->
 
-## Actual Behavior
+## Erroneous Behavior
 <!-- 
 Describe the expected behavior
 -->
@@ -34,16 +34,16 @@ A minimal example to reproduce the issue
 If you know the possible cause of the issue, please tell us.
 -->
 
-## Problem persists without calling from topgrade (Optional)
+## Problem persists without calling from topgrade
 <!-- 
 If you are clear about which command is wrong, run that command separately to 
 see if the problem persists
 -->
-[ ] Yes
+- [ ] Yes
 
 ## Configuration file (Optional)
 <!-- 
-Paste your configuration here if you think this issue is related to the 
+Paste your configuration here if you think this issue is related to 
 configuration.
 -->
 
