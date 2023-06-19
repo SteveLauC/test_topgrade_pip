@@ -5,10 +5,8 @@ body:
 
   - type: markdown
     attributes:
-    value: >
-       Thanks for taking the time to fill out this bug report!
-       Please make sure to [search for existing issues](https://github.com/topgrade-rs/topgrade/issues) 
-       before filing a new one!
+    value: |
+      Thanks for taking the time to fill out this bug report! Please make sure to [search for existing issues](https://github.com/topgrade-rs/topgrade/issues) before filing a new one!
 
   - type: textarea
     attributes:
