@@ -42,9 +42,13 @@ Execute the erroneous command directly to see if the problem persists
 
 ## Configuration file (Optional)
 <!-- 
-Paste your configuration here if you think this issue is related to 
-configuration.
+Paste your configuration file inside the code block if you think this issue is 
+related to configuration.
 -->
+
+```toml
+
+```
 
 ## Additional Details
 - Operation System/Version
