@@ -29,7 +29,7 @@ body:
       description: "If you are clear about which command is wrong, run that command separately to see if the problem persists"
       options:
         - label: "Yes"
-          required: true
+          required: false
 
   - type: textarea
     attributes:
@@ -62,7 +62,19 @@ body:
   - type: input
     attributes:
       label: "Installation"
-      description: "How did you install topgrade: build from repo / crates.io(cargo install topgrade) / package manager (which one) / other (describe)?"
+      description: "How did you install topgrade: build from repo / crates.io (cargo install topgrade) / package manager (which one) / other (describe)?"
       placeholder: "crates.io"
     validations:
       required: true
+
+  - type: markdown
+    attributes:
+      label: "Verbose Output"
+      description: "Run `topgrade -v` and paste the output here"
+      value: |
+        <details>
+        <!-- Paste the output of the problematic command with `-v` into the pre-tags -->
+        <pre>
+
+        </pre>
+        </details>
