@@ -16,12 +16,12 @@ Questions labeled with `Optional` can be skipped.
 
 ## Erroneous Behavior
 <!-- 
-Describe the expected behavior
+What actually happened?
 -->
 
 ## Expected Behavior
 <!-- 
-What actually happened?
+Describe the expected behavior
 -->
 
 ## Steps to reproduce
@@ -36,8 +36,7 @@ If you know the possible cause of the issue, please tell us.
 
 ## Problem persists without calling from topgrade
 <!-- 
-If you are clear about which command is wrong, run that command separately to 
-see if the problem persists
+Execute the erroneous command directly to see if the problem persists
 -->
 - [ ] Yes
 
@@ -53,7 +52,7 @@ configuration.
 
 - Installation
   <!-- 
-  How did you install topgrade: build from repo / crates.io(cargo install topgrade) 
+  How did you install topgrade: build from repo / crates.io (cargo install topgrade) 
   / package manager (which one) / other (describe)
   -->
 
@@ -61,7 +60,7 @@ configuration.
 
 ## Verbose Output (`topgrade -v`)
 <!-- 
-Paste the output of the **problematic command** with `-v` into the pre-tags
+Paste the verbose output into the pre-tags
 -->
 
 <details>
