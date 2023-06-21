@@ -7,12 +7,19 @@ assignees: ''
 
 ---
 
+<!--
 Thanks for taking the time to fill out this bug report! 
-Please make sure to [search for existing issues](https://github.com/topgrade-rs/topgrade/issues) before filing a new one!
+Please make sure to 
+[search for existing issues](https://github.com/topgrade-rs/topgrade/issues) 
+before filing a new one!
 
 Questions labeled with `Optional` can be skipped.
+-->
 
-<!-- If you're here to report about a "No asset found" error, please make sure that an hour has been passed since the last release was made. -->
+<!-- 
+If you're here to report about a "No asset found" error, please make sure that 
+an hour has been passed since the last release was made. 
+-->
 
 ## Erroneous Behavior
 <!-- 
