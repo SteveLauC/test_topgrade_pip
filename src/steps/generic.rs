@@ -15,7 +15,7 @@ use crate::command::{CommandExt, Utf8Output};
 use crate::execution_context::ExecutionContext;
 use crate::executor::ExecutorOutput;
 use crate::terminal::{print_separator, shell};
-use crate::utils::{self, require, require_option, which, PathExt};
+use crate::utils::{self, check_is_python_2_or_shim, require, require_option, which, PathExt, REQUIRE_SUDO};
 use crate::Step;
 use crate::HOME_DIR;
 use crate::{
@@ -112,7 +112,8 @@ pub fn run_rubygems(ctx: &ExecutionContext) -> Result<()> {
             .execute(gem)
             .args(["update", "--system"])
             .status_checked()?;
-    } else if let Some(sudo) = &ctx.sudo() {
+    } else {
+        let sudo = require_option(ctx.sudo().as_ref(), REQUIRE_SUDO.to_string())?;
         if !Path::new("/usr/lib/ruby/vendor_ruby/rubygems/defaults/operating_system.rb").exists() {
             ctx.run_type()
                 .execute(sudo)
@@ -121,9 +122,8 @@ pub fn run_rubygems(ctx: &ExecutionContext) -> Result<()> {
                 .args(["update", "--system"])
                 .status_checked()?;
         }
-    } else {
-        print_warning("No sudo detected. Skipping system upgrade");
     }
+
     Ok(())
 }
 
@@ -142,9 +142,8 @@ pub fn run_haxelib_update(ctx: &ExecutionContext) -> Result<()> {
     let mut command = if directory_writable {
         ctx.run_type().execute(&haxelib)
     } else {
-        let mut c = ctx
-            .run_type()
-            .execute(ctx.sudo().as_ref().ok_or(TopgradeError::SudoRequired)?);
+        let sudo = require_option(ctx.sudo().as_ref(), REQUIRE_SUDO.to_string())?;
+        let mut c = ctx.run_type().execute(sudo);
         c.arg(&haxelib);
         c
     };
@@ -310,9 +309,8 @@ pub fn run_vcpkg_update(ctx: &ExecutionContext) -> Result<()> {
     let mut command = if is_root_install {
         ctx.run_type().execute(&vcpkg)
     } else {
-        let mut c = ctx
-            .run_type()
-            .execute(ctx.sudo().as_ref().ok_or(TopgradeError::SudoRequired)?);
+        let sudo = require_option(ctx.sudo().as_ref(), REQUIRE_SUDO.to_string())?;
+        let mut c = ctx.run_type().execute(sudo);
         c.arg(&vcpkg);
         c
     };
@@ -370,7 +368,18 @@ pub fn run_mamba_update(ctx: &ExecutionContext) -> Result<()> {
 }
 
 pub fn run_pip3_update(ctx: &ExecutionContext) -> Result<()> {
-    let python3 = require("python3")?;
+    let py = require("python").and_then(check_is_python_2_or_shim);
+    let py3 = require("python3").and_then(check_is_python_2_or_shim);
+
+    let python3 = match (py, py3) {
+        // prefer `python` if it is available and is a valid Python 3.
+        (Ok(py), _) => py,
+        (Err(_), Ok(py3)) => py3,
+        (Err(py_err), Err(py3_err)) => {
+            return Err(SkipStep(format!("Skip due to following reasons: {} {}", py_err, py3_err)).into());
+        }
+    };
+
     Command::new(&python3)
         .args(["-m", "pip"])
         .output_checked_utf8()
@@ -510,9 +519,8 @@ pub fn run_tlmgr_update(ctx: &ExecutionContext) -> Result<()> {
     let mut command = if directory_writable {
         ctx.run_type().execute(&tlmgr)
     } else {
-        let mut c = ctx
-            .run_type()
-            .execute(ctx.sudo().as_ref().ok_or(TopgradeError::SudoRequired)?);
+        let sudo = require_option(ctx.sudo().as_ref(), REQUIRE_SUDO.to_string())?;
+        let mut c = ctx.run_type().execute(sudo);
         c.arg(&tlmgr);
         c
     };
@@ -592,8 +600,9 @@ pub fn run_composer_update(ctx: &ExecutionContext) -> Result<()> {
                 };
 
                 if has_update {
+                    let sudo = require_option(ctx.sudo().as_ref(), REQUIRE_SUDO.to_string())?;
                     ctx.run_type()
-                        .execute(ctx.sudo().as_ref().unwrap())
+                        .execute(sudo)
                         .arg(&composer)
                         .arg("self-update")
                         .status_checked()?;
@@ -676,14 +685,15 @@ pub fn run_helix_grammars(ctx: &ExecutionContext) -> Result<()> {
 
     print_separator("Helix");
 
+    let sudo = require_option(ctx.sudo().as_ref(), REQUIRE_SUDO.to_string())?;
     ctx.run_type()
-        .execute(ctx.sudo().as_ref().ok_or(TopgradeError::SudoRequired)?)
+        .execute(sudo)
         .args(["helix", "--grammar", "fetch"])
         .status_checked()
         .with_context(|| "Failed to download helix grammars!")?;
 
     ctx.run_type()
-        .execute(ctx.sudo().as_ref().ok_or(TopgradeError::SudoRequired)?)
+        .execute(sudo)
         .args(["helix", "--grammar", "build"])
         .status_checked()
         .with_context(|| "Failed to build helix grammars!")?;
@@ -773,4 +783,12 @@ pub fn run_stew(ctx: &ExecutionContext) -> Result<()> {
 
     print_separator("stew");
     ctx.run_type().execute(stew).args(["upgrade", "--all"]).status_checked()
+}
+
+pub fn run_bob(ctx: &ExecutionContext) -> Result<()> {
+    let bob = require("bob")?;
+
+    print_separator("Bob");
+
+    ctx.run_type().execute(bob).args(["update", "--all"]).status_checked()
 }

@@ -103,6 +103,7 @@ pub enum Step {
     Asdf,
     Atom,
     Bin,
+    Bob,
     BrewCask,
     BrewFormula,
     Bun,
@@ -601,6 +602,12 @@ impl ConfigFile {
 
             path
         };
+
+        if config_path == PathBuf::default() {
+            // Here we expect topgrade.d and consequently result is not empty.
+            // If empty, Self:: ensure() would have created the default config.
+            return Ok(result);
+        }
 
         let mut contents_non_split = fs::read_to_string(&config_path).map_err(|e| {
             tracing::error!("Unable to read {}", config_path.display());
@@ -1506,5 +1513,18 @@ impl Config {
         }
 
         self.opt.custom_commands.iter().any(|s| s == name)
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::config::ConfigFile;
+
+    /// Test the default configuration in `config.example.toml` is valid.
+    #[test]
+    fn test_default_config() {
+        let str = include_str!("../config.example.toml");
+
+        assert!(toml::from_str::<ConfigFile>(str).is_ok());
     }
 }
